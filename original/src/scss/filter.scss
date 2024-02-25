@@ -1,0 +1,37 @@
+.filter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    &__buttons {
+        display: flex;
+        flex-direction: column;
+    }
+
+
+
+    &__title {
+        font-size: 20px;
+        margin: 15px 50px;
+    }
+
+    &__button {
+        margin-left: 15px;
+    }
+
+    &__panel {
+        margin: 0 auto;
+        // padding-top: 15px;
+    }
+
+    &__input {
+        width: 250px;
+        padding-right: 40px;
+        margin-right: 50px;
+    }
+
+    &__reset-button {
+        margin: 15px !important;
+    }
+}

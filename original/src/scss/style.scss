@@ -1,0 +1,21 @@
+// IMPORT FONTS
+@import "fonts";
+// ============================================
+
+// IMPORT RESET STYLES
+@import "reset.scss";
+
+// ============================================
+
+// IMPORT STYLES
+@import "header.scss";
+@import "section-catalog.scss";
+@import "product-list.scss";
+@import "product.scss";
+@import "pagination.scss";
+@import "filter.scss";
+// ============================================
+
+body {
+    font-family: "Open Sans", sans-serif;
+  }
