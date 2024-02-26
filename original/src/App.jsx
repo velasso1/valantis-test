@@ -11,7 +11,7 @@ const App = () => {
       <Header />
       <Routes>
         <Route
-          path="/page/:pageUrl/from/:from"
+          path="/valantis-test/page/:pageUrl/from/:from"
           element={<ProductList />}
         ></Route>
       </Routes>

@@ -11,14 +11,21 @@ import Product from "./product";
 import PaginationComponent from "./pagination";
 import Filter from "./filter";
 import Loader from "./loader";
+import { Alert } from "@mui/material";
 
 const ProductList = () => {
   const dispatch = useDispatch();
   const { pageUrl, from } = useParams();
 
-  const { items, status, error, currentIds, isFiltering } = useSelector(
-    (state) => state.dataSlice
-  );
+  const {
+    items,
+    status,
+    error,
+    currentIds,
+    isFiltering,
+    filterError,
+    emptyResult,
+  } = useSelector((state) => state.dataSlice);
 
   useEffect(() => {
     // repeat query if has error
@@ -39,8 +46,12 @@ const ProductList = () => {
   return (
     <>
       <section className="catalog">
+        {filterError && (
+          <Alert severity="error">Произошла ошибка, повторите фильтрацию</Alert>
+        )}
         <Filter />
         <PaginationComponent />
+        {status && <Loader />}
         {!status && items.length ? (
           <div className="product-list">
             {items.map((item, index) => {
@@ -56,7 +67,7 @@ const ProductList = () => {
             })}
           </div>
         ) : (
-          <Loader />
+          <div>Товаров не найдено</div>
         )}
       </section>
     </>

@@ -5,7 +5,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/page/1/from/0");
+    navigate("/valantis-test/page/1/from/0");
   }, []);
   return (
     <>

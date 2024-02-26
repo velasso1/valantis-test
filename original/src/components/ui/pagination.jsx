@@ -20,7 +20,7 @@ const PaginationComponent = () => {
         renderItem={(item) => (
           <PaginationItem
             component={Link}
-            to={`/page/${item.page}/from/${
+            to={`/valantis-test/page/${item.page}/from/${
               item.page === 1 ? 0 : item.page * 50 - 50
             }`}
             {...item}

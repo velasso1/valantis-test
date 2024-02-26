@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { md5 } from "js-md5";
 
+const today = new Date();
+const year = today.getFullYear();
+const month = String(today.getMonth() + 1).padStart(2, "0");
+const day = String(today.getDate()).padStart(2, "0");
+
+const formattedDate = `${year + month + day}`;
+
 const initialState = {
   items: [],
   currentIds: [],
@@ -8,6 +15,8 @@ const initialState = {
   error: false,
   quantity: 0,
   isFiltering: false,
+  filterError: false,
+  emptyResult: false,
 };
 
 const dataSlice = createSlice({
@@ -20,14 +29,19 @@ const dataSlice = createSlice({
 
     itemsReceived(state, action) {
       // filter for duplicate elements and write to state
-      state.items = action.payload.result.filter((item, index, self) => {
-        return (
-          index ===
-          self.findIndex((itm) => {
-            return itm.id === item.id;
-          })
-        );
-      });
+      if (action.payload.result.length === 0) {
+        state.emptyResult = true;
+        state.items = [];
+      } else {
+        state.items = action.payload.result.filter((item, index, self) => {
+          return (
+            index ===
+            self.findIndex((itm) => {
+              return itm.id === item.id;
+            })
+          );
+        });
+      }
     },
 
     changeSendingStatus(state, action) {
@@ -45,6 +59,10 @@ const dataSlice = createSlice({
     setFiltering(state, action) {
       state.isFiltering = action.payload;
     },
+
+    hasFilterError(state, action) {
+      state.filterError = action.payload;
+    },
   },
 });
 
@@ -58,7 +76,7 @@ export const getIds = (from) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Auth": md5("Valantis_20240225"),
+          "X-Auth": md5(`Valantis_${formattedDate}`),
         },
         body: JSON.stringify({
           action: "get_ids",
@@ -87,7 +105,7 @@ export const getItems = (ids) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Auth": md5("Valantis_20240225"),
+          "X-Auth": md5(`Valantis_${formattedDate}`),
         },
         body: JSON.stringify({
           action: "get_items",
@@ -118,7 +136,7 @@ export const checkQtyProducts = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Auth": md5("Valantis_20240225"),
+          "X-Auth": md5(`Valantis_${formattedDate}`),
         },
         body: JSON.stringify({
           action: "get_fields",
@@ -140,11 +158,12 @@ export const filterItems = (filterFor, value) => {
     try {
       dispatch(changeSendingStatus(true));
       dispatch(setFiltering(true));
+      dispatch(hasFilterError(false));
       fetch("https://api.valantis.store:41000/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-Auth": md5("Valantis_20240225"),
+          "X-Auth": md5(`Valantis_${formattedDate}`),
         },
         body: JSON.stringify({
           action: "filter",
@@ -158,29 +177,10 @@ export const filterItems = (filterFor, value) => {
       );
     } catch (error) {
       console.error(`${error}`);
+      dispatch(hasFilterError(true));
     }
   };
 };
-
-// export const getAllBrands = () => {
-//   return (dispatch) => {
-//     try {
-//       fetch("https://api.valantis.store:41000/", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//           "X-Auth": md5("Valantis_20240225"),
-//         },
-//         body: JSON.stringify({
-//           action: "get_fields",
-//           params: { field: "brand" },
-//         }),
-//       }).then((resp) => resp.json().then((data) => console.log(data.result)));
-//     } catch (error) {
-//       console.error(`${error}`);
-//     }
-//   };
-// };
 
 export const {
   itemsReceived,
@@ -189,6 +189,7 @@ export const {
   getError,
   getQuantity,
   setFiltering,
+  hasFilterError,
 } = dataSlice.actions;
 
 export default dataSlice.reducer;

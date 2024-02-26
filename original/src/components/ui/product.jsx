@@ -8,7 +8,10 @@ const Product = ({ id, name, price, brand }) => {
       </div>
       <div className="product-item__image">
         <picture>
-          <img src="/images/picture.webp" alt="gold circle" />
+          <img
+            src="https://velasso1.github.io/valantis-test/images/picture.webp"
+            alt="gold circle"
+          />
         </picture>
       </div>
       <div className="product-item__info">

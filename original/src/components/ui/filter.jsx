@@ -24,8 +24,8 @@ const Filter = () => {
   const { pageUrl, from } = useParams();
 
   const applyFilter = (e) => {
-    setError(false);
-    if (state[`${e.target.getAttribute("value")}`].length > 0) {
+    const valueOfFilter = state[`${e.target.getAttribute("value")}`];
+    if (valueOfFilter.length > 0 || valueOfFilter > 0) {
       dispatch(
         filterItems(
           e.target.getAttribute("value"),
@@ -74,7 +74,10 @@ const Filter = () => {
               disabled={status}
               className="filter__input"
               value={state.price}
-              onChange={(e) => setState({ ...state, price: +e.target.value })}
+              onChange={(e) => {
+                setState({ ...state, price: +e.target.value });
+                setError(false);
+              }}
               type="number"
               placeholder="Введите цену"
             />
@@ -94,7 +97,10 @@ const Filter = () => {
               disabled={status}
               className="filter__input"
               value={state.product}
-              onChange={(e) => setState({ ...state, product: e.target.value })}
+              onChange={(e) => {
+                setState({ ...state, product: e.target.value });
+                setError(false);
+              }}
               placeholder="Введите название товара"
             />
             <Button
@@ -113,7 +119,10 @@ const Filter = () => {
               disabled={status}
               className="filter__input"
               value={state.brand}
-              onChange={(e) => setState({ ...state, brand: e.target.value })}
+              onChange={(e) => {
+                setState({ ...state, brand: e.target.value });
+                setError(false);
+              }}
               placeholder="Введите название бренда"
             />
             <Button
